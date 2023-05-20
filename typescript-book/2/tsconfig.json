@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "noEmitOnError": true, //에러 발생 시 자바스크립트 파일 생성 여부
+    "target": "ES5", //컴파일할 자바스크립트 버전
+    "watch": true //watch 모드 활성화 여부
+  }
+}
