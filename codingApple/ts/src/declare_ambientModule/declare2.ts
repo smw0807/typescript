@@ -1,0 +1,1 @@
+type TDeclare = string;
