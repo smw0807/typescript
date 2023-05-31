@@ -4,7 +4,7 @@
     "lib": ["ES2017"] /* 프로젝트는 es2017 api를 사용 */,
     /* Modules */
     "module": "commonjs",
-
+    "rootDir": "./src",
     "outDir": "./dist"
   }
 }
