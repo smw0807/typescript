@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES2017" /* es2017 문법으로 컴파일 */,
+    "lib": ["ES2017"] /* 프로젝트는 es2017 api를 사용 */,
+    /* Modules */
+    "module": "commonjs",
+
+    "outDir": "./dist"
+  }
+}
