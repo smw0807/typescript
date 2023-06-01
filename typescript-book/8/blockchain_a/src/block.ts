@@ -20,23 +20,27 @@ class Block {
 }
 
 class Blockchain {
-  private readonly chain: Block[] = [];
+  private readonly chain: Block[] = []; //블록체인을 저장할 곳
   private get latestBlock(): Block {
+    //마지막에 추가된 블록 정보 가져오기
     return this.chain[this.chain.length - 1];
   }
 
   constructor() {
-    //제네시스 블록 생성
+    //제네시스 블록 생성 후 체인에 추가
     this.chain.push(new Block(0, '0', Date.now(), 'Genesis Block'));
   }
 
+  //블록 추가
   addBlock(data: string): void {
+    //새 블록 인스턴스를 생성하고 각 프로퍼티를 추가
     const block = new Block(
       this.latestBlock.index + 1,
       this.latestBlock.hash,
       Date.now(),
       data
     );
+    //블록 추가
     this.chain.push(block);
   }
 }
