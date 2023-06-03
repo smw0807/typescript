@@ -1,3 +1,7 @@
+/**
+  최상위에 있는 tsconfig.json의 값을 상속 받고
+  module만 commonjs 방식으로 변경
+*/
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
