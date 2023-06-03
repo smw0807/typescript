@@ -1,0 +1,20 @@
+{
+  "name": "blockchain_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve",
+    "compile": "tsc && npm run deploy",
+    "deploy": "copyfiles -f src/browser/*.html src/browser/*.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "copyfiles": "^2.4.1",
+    "serve": "^14.2.0",
+    "typescript": "^5.1.3"
+  }
+}
