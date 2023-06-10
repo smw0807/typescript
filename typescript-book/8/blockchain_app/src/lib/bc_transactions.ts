@@ -1,4 +1,4 @@
-import { sha256 } from './universal_sha256';
+import { sha256 } from '../lib/universal_sha256.js';
 export interface Transaction {
   readonly sender: string;
   readonly recipient: string;
