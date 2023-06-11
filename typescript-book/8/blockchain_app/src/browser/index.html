@@ -17,6 +17,7 @@
         </p>
       </aside>
 
+      <!-- 거래 내역이 추가되는 부분 -->
       <section>
         <h2>Add transaction</h2>
         <form>
@@ -41,23 +42,27 @@
             disabled
             placeholder="Amount"
           />
+          <!-- 거래 내역을 보류 중인 거래 내역에추가 -->
           <button id="transfer" type="button" class="ripple" disabled>
             TRANSFER MONEY
           </button>
         </form>
       </section>
 
+      <!-- 보류 중인 거래 내역이 표시되는 부분 -->
       <section>
         <h2>Pending transactions</h2>
         <pre id="pending-transactions">
 No pending transactions at the moment.</pre
         >
+        <!-- 보류 중인 거래 내역으로 새 블록 채굴을 시작 -->
         <button id="confirm" type="button" class="ripple" disabled>
           CONFIRM TRANSACTIONS
         </button>
         <div class="clear"></div>
       </section>
 
+      <!-- 블록체인 현황 내역이 표시 -->
       <section>
         <h2>Blockchain state</h2>
         <div class="wrapper">
