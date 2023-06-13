@@ -7,6 +7,14 @@
 - nodemon : HMR
 - lit-html : 브라우저 DOM으로 렌더링하기 위한 자바스크립트 내 HTML 템플릿
 
+## 프로젝트 환경 설정
+
+tsconfig.json 파일은 extends키워드와 config 프로퍼티를 사용해 다른 파일에서 구성을 상속할 수 있다.
+
+- tsconfig.json : 클라이언트와 서버가 모두 사용하는 옵션을 저장
+- src/client/tsconfig.client.json : 클라이언트를 위한 옵션을 저장
+- src/server/tsconfig.server.json : 서버를 위한 옵션을 저장
+
 ## 디렉터리
 
 - public : 빌드 시 생성됨, 블록체인 노드를 위한 웹 클라이언트

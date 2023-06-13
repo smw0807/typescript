@@ -1,8 +1,8 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.json", //해당 파일 내 옵션을 상속받는다
   "compilerOptions": {
-    "module": "commonjs",
-    "outDir": "../../build"
+    "module": "commonjs", //import/export 구문을 commonJS 형식으로 변환한다.
+    "outDir": "../../build" //컴파일된 코드는 build 디렉터리에 저장된다
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"] //하위 디렉터리 내 모든 ts 파일을 컴파일 한다.
 }

@@ -1,8 +1,8 @@
 {
-  "compileOnSave": false,
+  "compileOnSave": false, //타입스크립트를 수정할 때마다 자종 컴파일을 금지
   "compilerOptions": {
-    "target": "es2017",
-    "sourceMap": true,
+    "target": "es2017", //ES2017을 지원하는 문법으로 자바스크립트를 컴파일
+    "sourceMap": true, //소스맵 생성
     "plugins": [
       {
         "name": "typescript-lit-html-plugin"
