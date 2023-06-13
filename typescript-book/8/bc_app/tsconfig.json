@@ -5,7 +5,7 @@
     "sourceMap": true, //소스맵 생성
     "plugins": [
       {
-        "name": "typescript-lit-html-plugin"
+        "name": "typescript-lit-html-plugin" //IDE 내 자동 완성 활성화됨
       }
     ]
   }
