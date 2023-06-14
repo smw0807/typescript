@@ -29,4 +29,17 @@ tsconfig.json 파일은 extends키워드와 config 프로퍼티를 사용해 다
 - src/server : 서버 단
   - main.ts : 추가 스크립트를 가져오고 웹소켓 및 블록체인 알림 서버를 시작
 - src/shared : ??
--
+
+### nodemon.json
+
+```json
+{
+  "exec": "node -r ts-node/register/transpile-only", //노드를 실행
+  "watch": ["src/server/**/*.ts"]
+}
+```
+
+exec 명령어로 Node.js 실행 옵션을 지정했다. -r 옵션은 —require 단축키로 실행 전 모듈을 먼저 로딩한다.  
+transpile-only 모듈은 타입 검사 없이 타입스크립트를 자바스크립트 코드로 컴파일하는 모듈로 ts-node 패키지가 transpile-only 모듈을 미리 로딩하도록 요청한다.
+transpile-only 모듈을 프리로딩하면, 서버에 별도로 tsc 프로세스를 시작할 필요가 없다.  
+모든 타입스크립트 파일이 로드되고 단일 Node.js 프로세스에서 자동으로 변환된다.
