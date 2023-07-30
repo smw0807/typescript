@@ -1,5 +1,5 @@
-import { sha256 } from './cryptography';
-import { randomDelay } from '../ui/common';
+import { sha256 } from './cryptography.js';
+import { randomDelay } from '../ui/common.js';
 
 const HASH_REQUIREMENT = '0000';
 
