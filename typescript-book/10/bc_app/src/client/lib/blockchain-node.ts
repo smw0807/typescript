@@ -133,24 +133,27 @@ export class BlockchainNode {
     }
 
     // 이전 블록의 해시에 대해 새 블록의 해시 확인
-    const newBlockHash = await this.caculateHash(newBlock);
+    const newBlockHash = await this.calculateHash(newBlock);
     const prevBlockBash = this._chain[previousBlockIndex].hash;
-    const newBlockValid = {
+    const newBlockValid =
       newBlockHash.startsWith(HASH_REQUIREMENT) &&
       newBlock.previousHash === prevBlockBash &&
-      newBlock.hash === newBlockHash
-    }
+      newBlock.hash === newBlockHash;
 
     if (!newBlockValid) {
       throw new Error(`${errorMessagePrefix} - hash verification has failed.`);
     }
 
     // 체인 끝에 새 블록을 추가합니다.
-    this._chain = [ ...this._chain, newBlock];
+    this._chain = [...this._chain, newBlock];
   }
 
   private async calculateHash(block: WithoutHash<Block>): Promise<string> {
-    const data = block.previousHash + block.timestamp + JSON.stringify(block.transactions) + block.nonce;
+    const data =
+      block.previousHash +
+      block.timestamp +
+      JSON.stringify(block.transactions) +
+      block.nonce;
     return sha256(data);
   }
 }
