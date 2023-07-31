@@ -2,13 +2,13 @@ import * as WebSocket from 'ws';
 
 export abstract class MessageServer<T> {
   constructor(private readonly wsServer: WebSocket.Server) {
-    this.wsServer.on('connection', this.subscribeToMessage);
+    this.wsServer.on('connection', this.subscribeToMessages);
     this.wsServer.on('error', this.cleanupDeadClients);
   }
 
   protected abstract handleMessage(sender: WebSocket, message: T): void;
 
-  protected readonly subscribeToMessage = (ws: WebSocket): void => {
+  protected readonly subscribeToMessages = (ws: WebSocket): void => {
     ws.on('message', (data: WebSocket.Data) => {
       if (typeof data === 'string') {
         this.handleMessage(ws, JSON.parse(data));
@@ -51,7 +51,7 @@ export abstract class MessageServer<T> {
 
   private isDead(client: WebSocket): boolean {
     return (
-      client.readyState == WebSocket.CLOSING ||
+      client.readyState === WebSocket.CLOSING ||
       client.readyState === WebSocket.CLOSED
     );
   }
