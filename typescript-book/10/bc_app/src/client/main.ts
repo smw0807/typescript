@@ -3,9 +3,9 @@ import { Application } from './ui/application.js';
 
 let renderingIsInProgress = false;
 let application = new Application(async () => {
-  // When two subsequent rendering calls arrive, only the first one passes the if statement.
-  // However changes made between the two subsequent calls will be picked up by the lit-html
-  // `render()` call invoked after `await 0` statement and the UI will reflect the most resent state.
+  // 두 개의 후속 렌더링 호출이 도착하면 첫 번째 렌더링 호출만 if 문을 통과합니다.
+  // 그러나 두 번의 후속 호출 간에 수행된 변경 사항은 lit-html에 의해 픽업됩니다
+  // wait 0 이후에 호출된 'render()' 호출은 가장 최근의 상태를 반영합니다.
   if (!renderingIsInProgress) {
     renderingIsInProgress = true;
     await 0;
