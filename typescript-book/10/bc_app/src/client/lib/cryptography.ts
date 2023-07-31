@@ -6,7 +6,7 @@ export async function sha256(data: string): Promise<string> {
   // 각 숫자를 16진수 문자열로 변환합니다,
   // 각 16진수를 정규화하므로 두 개의 기호로 구성됩니다.
   return hashAsArrayOfNumber
-    .map((b) => '00' + b.toString(16).slice(-2))
+    .map((b) => ('00' + b.toString(16)).slice(-2))
     .join('');
 }
 

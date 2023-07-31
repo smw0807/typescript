@@ -9,12 +9,12 @@ interface PromiseExecutor<T> {
 
 export class WebsocketController {
   private websocket: Promise<WebSocket>;
-  private readonly messageAwaitingReply = new Map<
+  private readonly messagesAwaitingReply = new Map<
     UUID,
     PromiseExecutor<Message>
   >();
 
-  constructor(private readonly messageCallback: (messages: Message) => void) {
+  constructor(private readonly messagesCallback: (messages: Message) => void) {
     this.websocket = this.connect();
   }
 
@@ -36,29 +36,28 @@ export class WebsocketController {
   private readonly onMessageReceived = (event: MessageEvent) => {
     const message = JSON.parse(event.data) as Message;
 
-    if (this.messageAwaitingReply.has(message.correlationId)) {
-      this.messageAwaitingReply.get(message.correlationId).resolve(message);
-      this.messageAwaitingReply.delete(message.correlationId);
+    if (this.messagesAwaitingReply.has(message.correlationId)) {
+      this.messagesAwaitingReply.get(message.correlationId).resolve(message);
+      this.messagesAwaitingReply.delete(message.correlationId);
     } else {
-      this.messageCallback(message);
+      this.messagesCallback(message); // an unexpected message from the server
     }
   };
 
-  //Partial : 모든 속성을 optional로 변경
   async send(
     message: Partial<Message>,
     awaitForReply: boolean = false
   ): Promise<Message> {
     return new Promise<Message>(async (resolve, reject) => {
       if (awaitForReply) {
-        this.messageAwaitingReply.set(message.correlationId, {
+        this.messagesAwaitingReply.set(message.correlationId, {
           resolve,
           reject,
         });
       }
       this.websocket.then(
         (ws) => ws.send(JSON.stringify(message)),
-        () => this.messageAwaitingReply.delete(message.correlationId)
+        () => this.messagesAwaitingReply.delete(message.correlationId)
       );
     });
   }
@@ -74,11 +73,11 @@ export class WebsocketController {
     return reply.payload;
   }
 
-  requestNewBlock(Transaction: Transaction[]): void {
+  requestNewBlock(transactions: Transaction[]): void {
     this.send({
       type: MessageTypes.NewBlockRequest,
       correlationId: uuid(),
-      payload: Transaction,
+      payload: transactions,
     });
   }
 

@@ -39,6 +39,7 @@ export class BlockchainNode {
       timestamp: Date.now(),
       transactions: [],
     });
+    this._chain.push(genesisBlock);
   }
 
   async mineBlock(block: NotMinedBlock): Promise<Block> {
@@ -134,10 +135,10 @@ export class BlockchainNode {
 
     // 이전 블록의 해시에 대해 새 블록의 해시 확인
     const newBlockHash = await this.calculateHash(newBlock);
-    const prevBlockBash = this._chain[previousBlockIndex].hash;
+    const prevBlockHash = this._chain[previousBlockIndex].hash;
     const newBlockValid =
       newBlockHash.startsWith(HASH_REQUIREMENT) &&
-      newBlock.previousHash === prevBlockBash &&
+      newBlock.previousHash === prevBlockHash &&
       newBlock.hash === newBlockHash;
 
     if (!newBlockValid) {
