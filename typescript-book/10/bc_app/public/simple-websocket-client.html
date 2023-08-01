@@ -7,18 +7,23 @@
     <span id="messageGoesHere"></span>
 
     <script type="text/javascript">
+      // 웹소켓 연결
       const ws = new WebSocket('ws://localhost:8085');
 
+      // 메세지를 표시할 DOM 엘리먼트 선택
       const mySpan = document.getElementById('messageGoesHere');
 
+      // 메세지를 처리하는 콜백함수
       ws.onmessage = function (event) {
         mySpan.textContent = event.data;
       };
 
+      // 오류 발생시, 콘솔로그 출력
       ws.onerror = function (event) {
         ws.close();
         console.log(`Error ${event}`);
       };
+      console.log(ws.readyState);
     </script>
   </body>
 </html>
