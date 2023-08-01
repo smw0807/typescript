@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json", //해당 파일 내 옵션을 상속받는다.
   "compilerOptions": {
+    "moduleResolution": "Node",
     "module": "ES6", //생성된 자바스크립트 코드에서 import/export 구문을 사용
     "outDir": "../../public", //public 디렉터리에 컴파일된 코드가 저장됨
     "inlineSources": true //원본 타입스크립트 코드와 소스맵을 한 파일로 만든다
