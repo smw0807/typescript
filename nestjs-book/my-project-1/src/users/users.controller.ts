@@ -10,6 +10,7 @@ import {
   BadRequestException,
   Header,
   Redirect,
+  Logger,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,11 +19,15 @@ import { Response } from 'express';
 
 @Controller('users')
 export class UsersController {
+  private readonly logger = new Logger(UsersController.name);
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    // return this.usersService.create(createUserDto);
+    const { email, name } = createUserDto;
+    this.logger.debug('params : ', createUserDto);
+    return `[POST] users/create : ${email}, ${name}`;
   }
 
   @Get()
