@@ -23,6 +23,14 @@ export class UsersService {
     throw new Error('Method not implemented.');
   }
 
+  async login(email: string, password: string): Promise<string> {
+    // TODO
+    // 1. email, password를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
+    // 2. JWT 발급
+
+    throw new Error('Method not implemented.');
+  }
+
   private checkUserExists(email: string) {
     this.log.debug(email);
     return false; //TODO: DB 연동 후 구현
