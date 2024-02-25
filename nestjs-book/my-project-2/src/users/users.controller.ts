@@ -31,9 +31,9 @@ export class UsersController {
     return await this.usersService.login(email, password);
   }
 
-  @Get('/:id')
-  async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
-    this.log.debug(this.getUserInfo.name, userId);
-    return await this.usersService.getUserInfo(userId);
-  }
+  // @Get('/:id')
+  // async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
+  //   this.log.debug(this.getUserInfo.name, userId);
+  //   return await this.usersService.getUserInfo(userId);
+  // }
 }
