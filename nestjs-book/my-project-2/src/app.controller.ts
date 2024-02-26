@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Logger, Param, ParseIntPipe } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CommonService } from './common/common.service';
 
@@ -34,5 +34,15 @@ export class AppController {
   findOne(@Param('id', ParseIntPipe) id: number) {
     this.logger.debug(id, typeof id);
     return id;
+  }
+
+  // 파이프 클래스를 전달하지 않고 객체를 직접 생성하여 전달할 수도 있다.
+  @Get(':code')
+  findCode(
+    @Param('code', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }))
+    code: number,
+  ) {
+    this.logger.debug(code);
+    return code;
   }
 }
