@@ -1,4 +1,13 @@
-import { Controller, Get, HttpStatus, Logger, Param, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  DefaultValuePipe,
+  Get,
+  HttpStatus,
+  Logger,
+  Param,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { CommonService } from './common/common.service';
 
@@ -30,19 +39,31 @@ export class AppController {
     }
    * 이런 에러를 받게 됨
    */
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     this.logger.debug(id, typeof id);
     return id;
   }
 
   // 파이프 클래스를 전달하지 않고 객체를 직접 생성하여 전달할 수도 있다.
-  @Get(':code')
+  @Get('/code/:code')
   findCode(
     @Param('code', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }))
     code: number,
   ) {
     this.logger.debug(code);
     return code;
+  }
+
+  //DefaultValuePipe는 인수의 값에 기본값을 설정할 때 사용한다.
+  //쿼리 매개변수가 생략된 경우 유용하다.
+  @Get('/board')
+  findAll(
+    @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ) {
+    this.logger.debug(`offset : ${offset}`);
+    this.logger.debug(`limit : ${limit}`);
+    return `${offset} - ${limit}`;
   }
 }
