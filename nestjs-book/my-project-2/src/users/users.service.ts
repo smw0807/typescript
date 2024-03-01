@@ -1,11 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UserInfo } from 'os';
+import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from 'src/email/email.service';
 import * as uuid from 'uuid';
+import { UserEntity } from './entity/user.entity';
+import { Repository } from 'typeorm';
+import { ulid } from 'ulid';
 @Injectable()
 export class UsersService {
-  private readonly log = new Logger(UsersService.name);
-  constructor(private emailService: EmailService) {}
+  private readonly logger = new Logger(UsersService.name);
+  constructor(
+    //@InjectRepository 데커레이터로 유저 저장소 주입
+    @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
+    private emailService: EmailService,
+  ) {}
 
   async createUser(name: string, email: string, password: string) {
     await this.checkUserExists(email);
@@ -13,14 +20,14 @@ export class UsersService {
     const signupVerifyToken = uuid.v1();
 
     await this.saveUser(name, email, password, signupVerifyToken);
-    await this.sendMemberJoinEmail(email, signupVerifyToken);
+    // await this.sendMemberJoinEmail(email, signupVerifyToken);
   }
 
   async verifyEmail(signupVerifyToken: string): Promise<string> {
     // TODO
     // 1. DB에서 signupVerifyToken으로 회원 가입 처리중인 유저가 있는지 조회하고 없다면 에러 처리
     // 2. 바로 로그인 상태가 되도록 JWT를 발급
-    this.log.debug(signupVerifyToken);
+    this.logger.debug(signupVerifyToken);
     throw new Error('Method not implemented.');
   }
 
@@ -40,12 +47,34 @@ export class UsersService {
   // }
 
   private checkUserExists(email: string) {
-    this.log.debug(email);
+    this.logger.debug(email);
     return false; //TODO: DB 연동 후 구현
   }
 
-  private saveUser(name: string, email: string, password: string, signupVerifyToken: string) {
-    return; //TODO: DB 연동 후 구현
+  /**
+   * 사용자 등록
+   * @param name 이름
+   * @param email 이메일
+   * @param password 페스워드
+   * @param signupVerifyToken 토큰
+   * @returns
+   */
+  private async saveUser(
+    name: string,
+    email: string,
+    password: string,
+    signupVerifyToken: string,
+  ): Promise<UserEntity> {
+    const user = new UserEntity();
+    //랜덤 스트링 생성
+    user.id = ulid();
+    user.name = name;
+    user.email = email;
+    user.password = password;
+    user.signupVerifyToken = signupVerifyToken;
+    const result = await this.usersRepository.save(user);
+    this.logger.debug(this.saveUser.name, JSON.stringify(result));
+    return result;
   }
 
   private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
