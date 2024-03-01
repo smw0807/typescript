@@ -1,8 +1,7 @@
-import { Body, Controller, Post, Logger, Query, Get, Param } from '@nestjs/common';
+import { Body, Controller, Post, Logger, Query } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
-import { UserInfo } from './models/UserInfo';
 import { UsersService } from './users.service';
 import { ValidationPipe } from 'src/common/validation.pipe';
 
