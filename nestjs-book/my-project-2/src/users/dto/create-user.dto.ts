@@ -29,6 +29,6 @@ export class CreateUserDto {
   readonly email: string;
 
   @IsString()
-  @Matches(/^[A-Za-z\\d!@#$%^&*()]{8, 30}$/) //영문 대소문자 또는 특수문자로 이뤄진 8~30자 문자열
+  @Matches(/^[A-Za-z\d!@#$%^&*()]{8,30}$/) //영문 대소문자 또는 특수문자로 이뤄진 8~30자 문자열
   readonly password: string;
 }
