@@ -8,26 +8,24 @@ import { ValidationPipe } from 'src/common/validation.pipe';
 
 @Controller('users')
 export class UsersController {
-  private readonly log = new Logger(UsersController.name);
+  private readonly logger = new Logger(UsersController.name);
   constructor(private usersService: UsersService) {}
 
   @Post() //{{api}}/users
   async createUser(@Body(ValidationPipe) dto: CreateUserDto): Promise<void> {
-    this.log.debug(dto);
     const { name, email, password } = dto;
     await this.usersService.createUser(name, email, password);
   }
 
   @Post('/email-verify') //{{api}}/users/email-verify?signupVerifyToken=dudhfusdhfusdh
   async verifyEmail(@Query() dto: VerifyEmailDto): Promise<string> {
-    this.log.debug(this.verifyEmail.name, dto);
     const { signupVerifyToken } = dto;
     return await this.usersService.verifyEmail(signupVerifyToken);
   }
 
   @Post('/login')
   async login(@Body() dto: UserLoginDto): Promise<string> {
-    this.log.debug(this.login.name, dto);
+    this.logger.debug(this.login.name, dto);
     const { email, password } = dto;
     return await this.usersService.login(email, password);
   }
