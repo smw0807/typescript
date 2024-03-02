@@ -1,9 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from 'src/email/email.service';
 import * as uuid from 'uuid';
 import { UserEntity } from './entity/user.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { ulid } from 'ulid';
 @Injectable()
 export class UsersService {
@@ -11,6 +11,7 @@ export class UsersService {
   constructor(
     //@InjectRepository 데커레이터로 유저 저장소 주입
     @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
+    private dataSource: DataSource,
     private emailService: EmailService,
   ) {}
 
@@ -47,7 +48,7 @@ export class UsersService {
   // }
 
   private checkUserExists(email: string) {
-    this.logger.debug(email);
+    this.logger.debug(this.checkUserExists.name, email);
     return false; //TODO: DB 연동 후 구현
   }
 
@@ -65,15 +66,36 @@ export class UsersService {
     password: string,
     signupVerifyToken: string,
   ): Promise<UserEntity> {
-    const user = new UserEntity();
-    //랜덤 스트링 생성
-    user.id = ulid();
-    user.name = name;
-    user.email = email;
-    user.password = password;
-    user.signupVerifyToken = signupVerifyToken;
-    const result = await this.usersRepository.save(user);
-    this.logger.debug(this.saveUser.name, JSON.stringify(result));
+    // 주입받은 DataSource 객체에서 QueryRunner를 생성
+    const queryRunner = this.dataSource.createQueryRunner();
+    // QueryRunner에서 DB에 연결
+    await queryRunner.connect();
+    // 트랜잭션 시작
+    await queryRunner.startTransaction();
+    let result = null;
+    try {
+      const user = new UserEntity();
+      //랜덤 스트링 생성
+      user.id = ulid();
+      user.name = name;
+      user.email = email;
+      user.password = password;
+      user.signupVerifyToken = signupVerifyToken;
+      // const result = await this.usersRepository.save(user);
+      result = queryRunner.manager.save(user);
+      this.logger.debug(this.saveUser.name, JSON.stringify(result));
+      // throw new InternalServerErrorException(null, 'Test Error');
+
+      // DB 작업으 수행한 후 커밋을 해서 영속화를 완료한다.
+      await queryRunner.commitTransaction();
+    } catch (e) {
+      this.logger.error(this.saveUser.name, e);
+      // 롤백
+      await queryRunner.rollbackTransaction();
+    } finally {
+      // 생성된 QueryRunner 객체 해제
+      await queryRunner.release();
+    }
     return result;
   }
 
