@@ -66,35 +66,23 @@ export class UsersService {
     password: string,
     signupVerifyToken: string,
   ): Promise<UserEntity> {
-    // 주입받은 DataSource 객체에서 QueryRunner를 생성
-    const queryRunner = this.dataSource.createQueryRunner();
-    // QueryRunner에서 DB에 연결
-    await queryRunner.connect();
-    // 트랜잭션 시작
-    await queryRunner.startTransaction();
     let result = null;
     try {
-      const user = new UserEntity();
-      //랜덤 스트링 생성
-      user.id = ulid();
-      user.name = name;
-      user.email = email;
-      user.password = password;
-      user.signupVerifyToken = signupVerifyToken;
-      // const result = await this.usersRepository.save(user);
-      result = queryRunner.manager.save(user);
-      this.logger.debug(this.saveUser.name, JSON.stringify(result));
-      // throw new InternalServerErrorException(null, 'Test Error');
+      // transaction 메서드는 EntityManager를 콜백으로 받아 사용자가 수행할 함수를 작성할 수 있다.
+      await this.dataSource.transaction(async (manager) => {
+        const user = new UserEntity();
+        //랜덤 스트링 생성
+        user.id = ulid();
+        user.name = name;
+        user.email = email;
+        user.password = password;
+        user.signupVerifyToken = signupVerifyToken;
 
-      // DB 작업으 수행한 후 커밋을 해서 영속화를 완료한다.
-      await queryRunner.commitTransaction();
+        result = manager.save(user);
+        this.logger.debug(this.saveUser.name, JSON.stringify(result));
+      });
     } catch (e) {
       this.logger.error(this.saveUser.name, e);
-      // 롤백
-      await queryRunner.rollbackTransaction();
-    } finally {
-      // 생성된 QueryRunner 객체 해제
-      await queryRunner.release();
     }
     return result;
   }
