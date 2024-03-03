@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+// import { AuthGuard } from './guard/authGuard';
 // import { logger3 } from './middleware/logger3';
 
 async function bootstrap() {
@@ -19,6 +20,9 @@ async function bootstrap() {
 
   // 미들웨어 전역으로 적용하기
   // app.use(logger3);
+
+  // 글로벌 가드 적용
+  // app.useGlobalGuards(new AuthGuard());
   await app.listen(port || 3000);
 }
 bootstrap();
