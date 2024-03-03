@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+// import { logger3 } from './middleware/logger3';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // 미들웨어 전역으로 적용하기
+  // app.use(logger3);
   await app.listen(port || 3000);
 }
 bootstrap();
