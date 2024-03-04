@@ -1,10 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  Logger,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from 'src/email/email.service';
 import * as uuid from 'uuid';
@@ -12,6 +6,7 @@ import { UserEntity } from './entity/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { ulid } from 'ulid';
 import { AuthService } from 'src/auth/auth.service';
+import { UserInfo } from './models/UserInfo';
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
@@ -64,12 +59,18 @@ export class UsersService {
     return this.authService.login({ id: user.id, name: user.name, email: user.email });
   }
 
-  // async getUserInfo(userId: string): Promise<UserInfo> {
-  // TODO
-  // 1. userId를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
-  // 2. 조회된 데이터를 UserInfo 타입으로 응답
-  // throw new Error('Method not implemented.');
-  // }
+  // 사용자 정보 조회
+  async getUserInfo(userId: string): Promise<UserInfo> {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('유저가 존재하지 않습니다.');
+    }
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+  }
 
   // 사용자가 존재하는지 확인
   private checkUserExists(email: string) {

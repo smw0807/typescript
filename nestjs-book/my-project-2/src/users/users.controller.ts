@@ -1,15 +1,30 @@
-import { Body, Controller, Post, Logger, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Logger,
+  Query,
+  UseGuards,
+  Get,
+  Param,
+  Headers,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UsersService } from './users.service';
 import { ValidationPipe } from 'src/common/validation.pipe';
 import { AuthGuard } from 'src/guard/authGuard';
+import { UserInfo } from './models/UserInfo';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('users')
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Post() //{{api}}/users
@@ -30,9 +45,13 @@ export class UsersController {
     return await this.usersService.login(email, password);
   }
 
-  // @Get('/:id')
-  // async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
-  //   this.log.debug(this.getUserInfo.name, userId);
-  //   return await this.usersService.getUserInfo(userId);
-  // }
+  @Get('/:id')
+  async getUserInfo(@Headers() headers: any, @Param('id') userId: string): Promise<UserInfo> {
+    this.logger.debug(`=======[${this.getUserInfo.name}]=======`);
+    this.logger.debug(headers.authorization);
+    this.logger.debug(userId);
+    const jwtString = headers.authorization.split('Bearer ')[1];
+    this.authService.verify(jwtString);
+    return this.usersService.getUserInfo(userId);
+  }
 }
