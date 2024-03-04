@@ -75,11 +75,12 @@ export class UsersService {
       await this.dataSource.transaction(async (manager) => {
         const user = new UserEntity();
         //랜덤 스트링 생성
-        user.id = ulid();
-        user.name = name;
-        user.email = email;
-        user.password = password;
-        user.signupVerifyToken = signupVerifyToken;
+        user.id = ulid(); //유저 아이디
+        user.name = name; //이름
+        user.email = email; //이메일
+        user.password = password; //비밀번호
+        user.signupVerifyToken = signupVerifyToken; //회원가입 인증 토큰
+        user.status = 'inactive'; //회원가입 상태
 
         result = manager.save(user);
         this.logger.debug(this.saveUser.name, JSON.stringify(result));
