@@ -1,4 +1,10 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from 'src/email/email.service';
 import * as uuid from 'uuid';
@@ -32,13 +38,26 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
-    return this.authService.login({ id: user.id, name: user.name, email: user.email });
+    try {
+      const result = await this.usersRepository.update(user.id, { status: 'active' });
+      if (result.affected !== 0) {
+        this.logger.debug(`${this.verifyEmail.name} : VerifyEmail Success`);
+        return this.authService.login({ id: user.id, name: user.name, email: user.email });
+      } else {
+        throw new Error('업데이트가 실패했습니다.');
+      }
+    } catch (error) {
+      throw new Error('업데이트가 실패했습니다.');
+    }
   }
 
   async login(email: string, password: string): Promise<string> {
     const user = await this.usersRepository.findOne({ where: { email, password } });
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다.');
+    }
+    if (user.status !== 'active') {
+      throw new ForbiddenException('유저가 활성화 되지 않았습니다.');
     }
     return this.authService.login({ id: user.id, name: user.name, email: user.email });
   }
