@@ -23,6 +23,7 @@ export class UsersService {
     private authService: AuthService,
   ) {}
 
+  // 사용자 등록
   async createUser(name: string, email: string, password: string) {
     await this.checkUserExists(email);
 
@@ -51,6 +52,7 @@ export class UsersService {
     }
   }
 
+  // 사용자 로그인
   async login(email: string, password: string): Promise<string> {
     const user = await this.usersRepository.findOne({ where: { email, password } });
     if (!user) {
@@ -69,6 +71,7 @@ export class UsersService {
   // throw new Error('Method not implemented.');
   // }
 
+  // 사용자가 존재하는지 확인
   private checkUserExists(email: string) {
     this.logger.debug(this.checkUserExists.name, email);
     return false; //TODO: DB 연동 후 구현
@@ -110,7 +113,7 @@ export class UsersService {
     return result;
   }
 
-  //
+  // 회원가입 이메일 전송
   private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
     await this.emailService.sendMemberJoinVerification(email, signupVerifyToken);
   }
