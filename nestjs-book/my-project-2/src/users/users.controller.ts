@@ -26,7 +26,6 @@ export class UsersController {
 
   @Post('/login')
   async login(@Body() dto: UserLoginDto): Promise<string> {
-    this.logger.debug(this.login.name, dto);
     const { email, password } = dto;
     return await this.usersService.login(email, password);
   }

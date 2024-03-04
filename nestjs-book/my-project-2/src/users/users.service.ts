@@ -29,19 +29,18 @@ export class UsersService {
   // 사용자 이메일 인증
   async verifyEmail(signupVerifyToken: string): Promise<string> {
     const user = await this.usersRepository.findOne({ where: { signupVerifyToken } });
-    this.logger.debug(this.verifyEmail.name, JSON.stringify(user));
     if (!user) {
-      throw new NotFoundException('가입 처리중인 유저가 없습니다.');
+      throw new NotFoundException('유저가 존재하지 않습니다.');
     }
     return this.authService.login({ id: user.id, name: user.name, email: user.email });
   }
 
   async login(email: string, password: string): Promise<string> {
-    // TODO
-    // 1. email, password를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
-    // 2. JWT 발급
-
-    throw new Error('Method not implemented.');
+    const user = await this.usersRepository.findOne({ where: { email, password } });
+    if (!user) {
+      throw new NotFoundException('유저가 존재하지 않습니다.');
+    }
+    return this.authService.login({ id: user.id, name: user.name, email: user.email });
   }
 
   // async getUserInfo(userId: string): Promise<UserInfo> {
@@ -91,6 +90,7 @@ export class UsersService {
     return result;
   }
 
+  //
   private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
     await this.emailService.sendMemberJoinVerification(email, signupVerifyToken);
   }
