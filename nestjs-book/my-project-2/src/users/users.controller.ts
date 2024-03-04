@@ -45,13 +45,11 @@ export class UsersController {
     return await this.usersService.login(email, password);
   }
 
+  @UseGuards(AuthGuard)
   @Get('/:id')
-  async getUserInfo(@Headers() headers: any, @Param('id') userId: string): Promise<UserInfo> {
+  async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
     this.logger.debug(`=======[${this.getUserInfo.name}]=======`);
-    this.logger.debug(headers.authorization);
     this.logger.debug(userId);
-    const jwtString = headers.authorization.split('Bearer ')[1];
-    this.authService.verify(jwtString);
     return this.usersService.getUserInfo(userId);
   }
 }
