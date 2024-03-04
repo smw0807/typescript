@@ -12,4 +12,5 @@ export const validationSchema = Joi.object({
   DATABASE_PASSWORD: Joi.string(),
   DATABASE_NAME: Joi.string(),
   DATABASE_SYNCRONIZE: Joi.boolean(),
+  JWT_SECRET: Joi.string().required(),
 });

@@ -14,18 +14,21 @@ import { DatabaseModule } from './database/database.module';
 // import { LoggerMiddleware } from './middleware/logger1';
 // import { UsersController } from './users/users.controller';
 // import { Logger2Middleware } from './middleware/logger2';
+import { AuthModule } from './auth/auth.module';
+import authConfig from './config/authConfig';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: process.env.NODE_ENV === 'development' ? '.env.development' : '.env.production',
-      load: [emailConfig, dbConfig],
+      load: [emailConfig, dbConfig, authConfig],
       isGlobal: true,
       validationSchema,
     }),
     DatabaseModule,
     CoreModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   //가드에 종속성 주입을 사용해서 다른 프로바이더를 주입해서 사용하고 싶으면 커스텀 프로바이더로 선언해야 한다.
