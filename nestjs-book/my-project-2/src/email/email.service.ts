@@ -25,9 +25,7 @@ export class EmailService {
   }
 
   async sendMemberJoinVerification(emailAddress: string, signupVerifyToken: string) {
-    this.logger.debug(this.sendMemberJoinVerification.name);
     const baseUrl = this.config.baseUrl;
-
     const url = `${baseUrl}/users/email-verify?signupVerifyToken=${signupVerifyToken}`;
 
     const meilOptions: EamilOptions = {
@@ -41,7 +39,6 @@ export class EmailService {
       `,
     };
     const result = await this.transporter.sendMail(meilOptions);
-    this.logger.debug(result);
     return result;
   }
 }
