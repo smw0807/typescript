@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Logger, Query, UseGuards, Get, Param } from '@nestjs/common';
+import { Body, Controller, Post, Logger, Query, UseGuards, Get } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -7,6 +7,7 @@ import { ValidationPipe } from 'src/common/validation.pipe';
 import { AuthGuard } from 'src/guard/authGuard';
 import { UserInfo } from './models/UserInfo';
 import { AuthService } from 'src/auth/auth.service';
+import { User } from 'src/decorator/user';
 
 @Controller('users')
 export class UsersController {
@@ -36,10 +37,11 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('/:id')
-  async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
+  @Get('/info')
+  async getUserInfo(@User() user: UserInfo): Promise<UserInfo> {
     this.logger.debug(`=======[${this.getUserInfo.name}]=======`);
-    this.logger.debug(userId);
+    this.logger.debug(user);
+    const { id: userId } = user;
     return this.usersService.getUserInfo(userId);
   }
 }
