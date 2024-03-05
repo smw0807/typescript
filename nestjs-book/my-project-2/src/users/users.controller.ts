@@ -8,6 +8,7 @@ import { AuthGuard } from 'src/guard/authGuard';
 import { UserInfo } from './models/UserInfo';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/decorator/user';
+import { UserData } from 'src/decorator/userData';
 
 @Controller('users')
 export class UsersController {
@@ -43,5 +44,13 @@ export class UsersController {
     this.logger.debug(user);
     const { id: userId } = user;
     return this.usersService.getUserInfo(userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/username')
+  async getUserName(@UserData('name') name: string): Promise<string> {
+    this.logger.debug(`=======[${this.getUserName.name}]=======`);
+    this.logger.debug(name);
+    return name;
   }
 }
