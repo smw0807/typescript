@@ -9,12 +9,22 @@ export class AuthGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    return this.validateRequest(request);
+    const tokenInfo = this.verifyToken(request);
+
+    if (tokenInfo) {
+      request.user = {
+        name: tokenInfo.name,
+        email: tokenInfo.email,
+        userId: tokenInfo.userId,
+      };
+      return true;
+    }
+    return false;
   }
 
-  private validateRequest(request: Request) {
+  // 토큰 검증 및 사용자 정보 추출
+  private verifyToken(request: Request) {
     const jwtString = request.headers.authorization.split('Bearer ')[1];
-    this.authService.verify(jwtString);
-    return true;
+    return this.authService.verify(jwtString);
   }
 }
