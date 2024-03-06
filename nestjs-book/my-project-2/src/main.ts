@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+// import { MyLoggerService } from './logger/myLogger.service';
 // import { AuthGuard } from './guard/authGuard';
 // import { logger3 } from './middleware/logger3';
 
@@ -23,6 +24,9 @@ async function bootstrap() {
 
   // 글로벌 가드 적용
   // app.useGlobalGuards(new AuthGuard());
+
+  // 커스텀 로거를 전역으로 사용하기
+  // app.useLogger(app.get(MyLoggerService));
   await app.listen(port || 3000);
 }
 bootstrap();

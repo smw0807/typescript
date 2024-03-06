@@ -16,6 +16,7 @@ import { DatabaseModule } from './database/database.module';
 // import { Logger2Middleware } from './middleware/logger2';
 import { AuthModule } from './auth/auth.module';
 import authConfig from './config/authConfig';
+import { MyLoggerModule } from './logger/myLogger.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import authConfig from './config/authConfig';
       isGlobal: true,
       validationSchema,
     }),
+    MyLoggerModule,
     DatabaseModule,
     CoreModule,
     UsersModule,
