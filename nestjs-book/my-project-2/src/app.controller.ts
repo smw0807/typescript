@@ -21,6 +21,11 @@ export class AppController {
 
   @Get()
   getHello(): string {
+    this.logger.error('level: error');
+    this.logger.warn('level: warn');
+    this.logger.log('level: log');
+    this.logger.debug('level: debug');
+    this.logger.verbose('level: verbose');
     return this.appService.getHello();
   }
 
