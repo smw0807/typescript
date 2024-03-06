@@ -2,12 +2,34 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+// import { WinstonModule } from 'nest-winston';
+// import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
+// import * as winston from 'winston';
 // import { MyLoggerService } from './logger/myLogger.service';
 // import { AuthGuard } from './guard/authGuard';
 // import { logger3 } from './middleware/logger3';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(
+    AppModule,
+    // 윈스턴 로거를 전역으로 사용하기
+    /*{
+    logger: WinstonModule.createLogger({
+      transports: [
+        new winston.transports.Console({
+          level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            nestWinstonModuleUtilities.format.nestLike('MyApp', {
+              colors: true,
+              prettyPrint: true,
+            }),
+          ),
+        }),
+      ],
+    }),
+  }*/
+  );
   const configService = app.get(ConfigService);
   const port = configService.get('APP_PORT');
 
