@@ -17,6 +17,7 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import authConfig from './config/authConfig';
 import { MyLoggerModule } from './logger/myLogger.module';
+import { WinstonLoggerModule } from './logger/winstonLogger.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { MyLoggerModule } from './logger/myLogger.module';
       isGlobal: true,
       validationSchema,
     }),
+    WinstonLoggerModule,
     MyLoggerModule,
     DatabaseModule,
     CoreModule,
