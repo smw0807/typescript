@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Logger, Query, UseGuards, Get } from '@nestjs/common';
+import { Body, Controller, Post, Logger, Query, UseGuards, Get, Inject } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -9,6 +9,7 @@ import { UserInfo } from './models/UserInfo';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/decorator/user';
 import { UserData } from 'src/decorator/userData';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Controller('users')
 export class UsersController {
@@ -16,6 +17,7 @@ export class UsersController {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly myLogger: Logger,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -33,6 +35,7 @@ export class UsersController {
 
   @Post('/login')
   async login(@Body() dto: UserLoginDto): Promise<string> {
+    this.myLogger.debug('dto', dto);
     const { email, password } = dto;
     return await this.usersService.login(email, password);
   }
@@ -40,8 +43,11 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Get('/info')
   async getUserInfo(@User() user: UserInfo): Promise<UserInfo> {
-    this.logger.debug(`=======[${this.getUserInfo.name}]=======`);
-    this.logger.debug(user);
+    // this.logger.debug(`=======[${this.getUserInfo.name}]=======`);
+    // this.logger.debug(user);
+    this.myLogger.error('error log');
+    this.myLogger.warn('warn log');
+    this.myLogger.debug(this.getUserInfo.name, user);
     const { id: userId } = user;
     return this.usersService.getUserInfo(userId);
   }

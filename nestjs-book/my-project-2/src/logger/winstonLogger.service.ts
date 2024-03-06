@@ -8,10 +8,13 @@ export class WinstonLoggerService {
     return {
       transports: [
         new winston.transports.Console({
-          level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
+          level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
           format: winston.format.combine(
             winston.format.timestamp(),
-            nestWinstonModuleUtilities.format.nestLike('MyApp', { prettyPrint: true }),
+            nestWinstonModuleUtilities.format.nestLike('MyApp', {
+              colors: true,
+              prettyPrint: true,
+            }),
           ),
         }),
       ],
