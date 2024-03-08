@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+// import { HttpExceptionFilter } from './filters/httpExceptionFilter';
 // import { WinstonModule } from 'nest-winston';
 // import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 // import * as winston from 'winston';
@@ -49,6 +50,9 @@ async function bootstrap() {
 
   // 커스텀 로거를 전역으로 사용하기
   // app.useLogger(app.get(MyLoggerService));
+
+  // 글로벌 예외 필터 적용
+  // app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(port || 3000);
 }
 bootstrap();
