@@ -14,10 +14,12 @@ import { Request, Response } from 'express';
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   constructor(private logger: Logger) {}
+
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse<Response>();
     const req = ctx.getRequest<Request>();
+    const stack = exception.stack;
 
     /**
      * Nest가 처리하는 대부분의 예외는 HttpException 클래스를 상속받는다.
@@ -33,6 +35,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       timestamp: new Date(),
       url: req.url,
       response,
+      stack,
     };
     this.logger.log(log);
 

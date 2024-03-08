@@ -7,11 +7,14 @@ import {
   Param,
   ParseIntPipe,
   Query,
+  UseFilters,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CommonService } from './common/common.service';
+import { HttpExceptionFilter } from './filters/httpExceptionFilter';
 
 @Controller()
+@UseFilters(HttpExceptionFilter)
 export class AppController {
   private readonly logger = new Logger(AppController.name);
   constructor(

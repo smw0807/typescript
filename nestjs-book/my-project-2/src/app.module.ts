@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 // import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
 import authConfig from './config/authConfig';
 import { MyLoggerModule } from './logger/myLogger.module';
 import { WinstonLoggerModule } from './logger/winstonLogger.module';
+import { FilterModule } from './filters/filter.module';
 // import { APP_FILTER } from '@nestjs/core';
 // import { HttpExceptionFilter } from './filters/httpExceptionFilter';
 
@@ -35,16 +36,11 @@ import { WinstonLoggerModule } from './logger/winstonLogger.module';
     CoreModule,
     UsersModule,
     AuthModule,
+    FilterModule,
   ],
   controllers: [AppController],
   //가드에 종속성 주입을 사용해서 다른 프로바이더를 주입해서 사용하고 싶으면 커스텀 프로바이더로 선언해야 한다.
-  providers: [
-    AppService /*, { provide: APP_GUARD, useClass: AuthGuard }*/,
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: HttpExceptionFilter,
-    // },
-  ],
+  providers: [AppService /*, { provide: APP_GUARD, useClass: AuthGuard }*/, Logger],
 })
 export class AppModule {}
 // export class AppModule implements NestModule {
