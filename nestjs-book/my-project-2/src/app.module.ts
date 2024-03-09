@@ -21,6 +21,7 @@ import { WinstonLoggerModule } from './logger/winstonLogger.module';
 import { FilterModule } from './filters/filter.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { BatchModule } from './batch/batch.module';
 // import { APP_FILTER } from '@nestjs/core';
 // import { HttpExceptionFilter } from './filters/httpExceptionFilter';
 
@@ -39,6 +40,7 @@ import { LoggingInterceptor } from './interceptor/logging.interceptor';
     UsersModule,
     AuthModule,
     FilterModule,
+    BatchModule,
   ],
   controllers: [AppController],
   //가드에 종속성 주입을 사용해서 다른 프로바이더를 주입해서 사용하고 싶으면 커스텀 프로바이더로 선언해야 한다.
