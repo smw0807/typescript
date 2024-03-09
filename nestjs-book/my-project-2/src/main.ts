@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 // import { LoggingInterceptor } from './interceptor/logging.interceptor';
+// import { TransformInterceptor } from './interceptor/transform.interceptor';
 // import { HttpExceptionFilter } from './filters/httpExceptionFilter';
 // import { WinstonModule } from 'nest-winston';
 // import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
@@ -56,7 +57,7 @@ async function bootstrap() {
   // app.useGlobalFilters(new HttpExceptionFilter());
 
   // 글로벌 인터셉터 적용
-  // app.useGlobalInterceptors(new LoggingInterceptor());
+  // app.useGlobalInterceptors(new LoggingInterceptor(), new TransformInterceptor());
   await app.listen(port || 3000);
 }
 bootstrap();

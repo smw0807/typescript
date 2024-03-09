@@ -1,4 +1,15 @@
-import { Body, Controller, Post, Logger, Query, UseGuards, Get, Inject } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Logger,
+  Query,
+  UseGuards,
+  Get,
+  Inject,
+  UseInterceptors,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -10,6 +21,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/decorator/user';
 import { UserData } from 'src/decorator/userData';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { ErrorsInterceptor } from 'src/interceptor/error.interceptor';
 
 @Controller('users')
 export class UsersController {
@@ -52,9 +64,11 @@ export class UsersController {
     return this.usersService.getUserInfo(userId);
   }
 
+  @UseInterceptors(ErrorsInterceptor)
   @UseGuards(AuthGuard)
   @Get('/username')
   async getUserName(@UserData('name') name: string): Promise<string> {
+    // throw new InternalServerErrorException();
     this.logger.debug(`=======[${this.getUserName.name}]=======`);
     this.logger.debug(name);
     return name;
