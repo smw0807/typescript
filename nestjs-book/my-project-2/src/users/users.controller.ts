@@ -8,7 +8,6 @@ import {
   Get,
   Inject,
   UseInterceptors,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
@@ -22,6 +21,8 @@ import { User } from 'src/decorator/user';
 import { UserData } from 'src/decorator/userData';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { ErrorsInterceptor } from 'src/interceptor/error.interceptor';
+import { CommandBus } from '@nestjs/cqrs';
+import { CreateUserCommand } from './event/user-created.event';
 
 @Controller('users')
 export class UsersController {
@@ -29,6 +30,7 @@ export class UsersController {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
+    private commandBus: CommandBus,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly myLogger: Logger,
   ) {}
 
@@ -36,7 +38,9 @@ export class UsersController {
   @Post() //{{api}}/users
   async createUser(@Body(ValidationPipe) dto: CreateUserDto): Promise<void> {
     const { name, email, password } = dto;
-    await this.usersService.createUser(name, email, password);
+    const command = new CreateUserCommand(name, email, password);
+    return this.commandBus.execute(command);
+    // await this.usersService.createUser(name, email, password);
   }
 
   @Post('/email-verify') //{{api}}/users/email-verify?signupVerifyToken=dudhfusdhfusdh
